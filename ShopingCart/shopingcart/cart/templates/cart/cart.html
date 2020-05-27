@@ -1,0 +1,45 @@
+{% extends "index/base.html" %}
+
+{% block content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Remove</th>
+    </tr>
+  </thead>
+
+{% if cart %}
+    {% for item in cartitem %}
+<!--      {% if user.cart.id is item.cart.id %}-->
+      <tbody>
+        <tr>
+          <td>{{ item.item }}</td>
+          <td>{{ item.itemtotal }}</td>
+          <td><a href="{% url 'decrease_quantity' item.item.id %}">-</a>{{ item.quantity }}
+            {% if item.item.available %}
+            <a href="{% url 'increase_quantity' item.item.id %}">+</a>
+          {% endif %}
+          </td>
+          <td><a href="{% url 'remove_item' item.item.id %}">Remove</a></td>
+        </tr>
+      </tbody>
+<!--      {% endif %}-->
+    {% endfor %}
+  {% else %}
+    {% for item in cart.products.all %}
+      <tbody>
+        <tr>
+          <td>{{ item.name }}</td>
+          <td>{{ item.price }}</td>
+          <td><a href="{% url 'remove_item' item.id %}">Remove</a></td>
+        </tr>
+      </tbody>
+    {% endfor %}
+  {% endif %}
+
+  <p> Total cost: {{ user.cart.total }} </p>
+
+{% endblock %}

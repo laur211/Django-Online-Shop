@@ -1,0 +1,32 @@
+{% extends "index/base.html" %}
+{% block content %}
+
+    <form action="{% url 'search' %}" method="get">
+        <input name="q" type="text" placeholder="Search...">
+        <button type="submit">Search</button>
+    </form>
+
+    <div class="row">
+        {% for product in Products_list %}
+        <div class="col">
+            <div class="card" style="width: 18rem; height: 25rem;">
+                  <img src=" {{ product.image.url }}" alt= "" class="card-img-top" style="width: 10rem; height: 10rem;">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.price }}Lei</p>
+                      {% if user.groups.all.0.name == 'Staff' %}
+                          <p>{{ product.quantity }}</p>
+                          <p>Available: {{ product.available }}</p>
+                      {% endif %}
+                    <a href="{% url 'update_cart' product.id %}" class="btn btn-primary">Buy now!</a>
+                      {% if user.groups.all.0.name == 'Staff' %}
+                          <a href="{% url 'delete_product' product.id %}" class="btn btn-primary">Delete Product</a>
+                          <a href="{% url 'update_product' product.id %}" class="btn btn-primary">Update Product</a>
+                      {% endif %}
+                    </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
